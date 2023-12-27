@@ -1,3 +1,6 @@
+# Naive, O(N^2) solution.
+# Gets 9/15 points.
+
 from collections import defaultdict
 
 _ = input()
