@@ -1,1 +1,0 @@
-# Same as Problem J4.
