@@ -1,3 +1,6 @@
+import functools
+
+@functools.cache
 def find_partitions_n(prev, n, k):
     if k == 1:
         return 1
