@@ -1,3 +1,5 @@
+# Gets 11/15 points.
+
 import sys
 from collections import defaultdict, deque
 
