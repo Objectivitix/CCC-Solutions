@@ -1,7 +1,25 @@
+# Full points O(N) solution.
+#
+# Finding the smallest subtree G containing all
+# targets is key. Notice that all leaves of G must
+# be targets. Say the problem was different, and
+# we had to return to our starting restaurant. We
+# must then travel through each edge twice.
+#
+# But we don't have this restraint. We want to
+# minimize the total path length, so we want to
+# maximize the path whose constituent edges we'll
+# only visit once each. This is the diameter of G.
+#
+# All that's left to do is figuring out the first
+# step: pruning the original tree down to G. We do
+# this by rooting the tree, then traversing depth-
+# first, tracking which nodes must be members of G.
+
 import sys
 from collections import defaultdict, deque
 
-sys.setrecursionlimit(100001)
+sys.setrecursionlimit(100_000)
 
 
 def parse_raw():
@@ -22,49 +40,34 @@ def parse_raw():
     yield adj_list
 
 
-def get_leaves(adj_list):
-    for node in adj_list:
-        if len(adj_list[node]) == 1:
-            yield node
-
-
 def prune(adj_list, include):
     valid = {}
     visited = set()
-    leaves = set(get_leaves(adj_list))
 
-    def dfs(curr):
+    def traverse(curr):
         visited.add(curr)
 
-        sub_valid = []
+        valid_in_subtree = False
 
         for adj in adj_list[curr]:
-            if adj not in visited:
-                dfs(adj)
-                sub_valid.append(valid[adj])
-
-        valid[curr] = any(sub_valid) or curr in include
-
-    root = next(iter(include))
-    dfs(root)
-
-    return {node for node, flag in valid.items() if flag}
-
-
-def pick(adj_list, nodes):
-    subgraph = defaultdict(list)
-
-    for node in adj_list:
-        if node not in nodes:
-            continue
-
-        for adj in adj_list[node]:
-            if adj not in nodes:
+            if adj in visited:
                 continue
 
-            subgraph[node].append(adj)
+            traverse(adj)
 
-    return subgraph
+            if valid[adj]:
+                valid_in_subtree = True
+
+        valid[curr] = curr in include or valid_in_subtree
+
+    # We must root the tree at one of the targets.
+    root = next(iter(include))
+    traverse(root)
+
+    return {
+        u: [v for v in adj_list[u] if valid[v]]
+        for u in adj_list if valid[u]
+    }
 
 
 def find_farthest_node(source, adj_list):
@@ -95,8 +98,8 @@ def find_diameter(adj_list):
 
 _, _, TARGETS, ADJ_LIST = parse_raw()
 
-subgraph = pick(ADJ_LIST, prune(ADJ_LIST, TARGETS))
-edges_n = len(subgraph) - 1
-diameter = find_diameter(subgraph)
+pruned = prune(ADJ_LIST, TARGETS)
+edges_n = len(pruned) - 1
+diameter = find_diameter(pruned)
 
 print(edges_n * 2 - diameter)
