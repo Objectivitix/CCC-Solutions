@@ -1,4 +1,5 @@
-# Full points O(N) solution.
+# O(N) solution. Full points on DMOJ, segfaults on
+# CCCGrader due to deep recursion. A rare Python L.
 #
 # Finding the smallest subtree G containing all
 # targets is key. Notice that all leaves of G must
