@@ -4,7 +4,7 @@
 from collections import Counter
 
 NEEDLE = Counter(input())
-N = NEEDLE.total()
+N = sum(NEEDLE.values())
 
 HAYSTACK = input()
 
