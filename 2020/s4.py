@@ -3,11 +3,16 @@
 from itertools import accumulate
 
 
-def cum_count(target):
+def cum_counter(target):
     return lambda prev, char: prev + (char == target)
 
 
 def wrapped_count(start, end, target, cums, n):
+    """
+    Count the number of `target` chars contained by the interval
+    [start, end), where either or both endpoints can exceed the
+    string length, in which case we wrap.
+    """
     intervals = (
         [(start % n, end % n)] if start >= n
         else [(start, end)] if end < n
@@ -49,7 +54,7 @@ SEATS = input()
 N = len(SEATS)
 
 CUMS = {
-    c: list(accumulate([0, *SEATS], cum_count(c)))
+    c: list(accumulate([0, *SEATS], cum_counter(c)))
     for c in "ABC"
 }
 
