@@ -21,7 +21,7 @@ def raycast(i, j, maze):
         new_i, new_j = i + di, j + dj
 
         while maze[new_i][new_j] != "W":
-            if maze[new_i][new_j] in "S.": # this is brutal guys what the fuck
+            if maze[new_i][new_j] in "S.": # this is brutal guys what the flip
                 maze[new_i][new_j] = "#"
 
             new_i += di
@@ -83,7 +83,6 @@ def parse_raw():
     yield deepcopy(maze)
 
     wallify_cameras(maze)
-    # print("\n".join("".join(row) for row in maze))
 
     yield get_adj_list(maze)
 
