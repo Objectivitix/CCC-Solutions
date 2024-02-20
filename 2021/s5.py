@@ -2,7 +2,8 @@
 #
 # Line sweep for initial LCM calculations in linear time
 # + sparse table for range GCD queries (to check validity
-# of tentative solution) in constant time (per query).
+# of tentative solution) in constant time per query. This
+# works because GCD is associative and overlap-friendly.
 #
 # Time: O(N + M)    Space: O(N + M + max(Z_i))
 
